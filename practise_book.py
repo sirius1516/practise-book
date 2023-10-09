@@ -1,18 +1,21 @@
+import time
 from functools import wraps
 
-def prohibit_more_than_2_args(function):
-    @wraps(function)
-    def wrap_function(*args, **kwargs):
-        if len(args) < 3:
+
+def wait(seconds):
+    def decor_function(function):
+        @wraps(function)
+        def wrap_function(*args, **kwargs):
+            time.sleep(seconds)
+            print(f'There was a pause {seconds} seconds before')
             return function(*args, **kwargs)
-        else:
-            raise ValueError('Function must have less than 3 arguments')
-    return wrap_function
+        return wrap_function
+    return decor_function
 
 
-@prohibit_more_than_2_args
-def prohibited_args(*args, **kwargs):
-    return "Good job! There are 2 args"
+@wait(5)
+def wait_function(name):
+    return f'Hello, {name}!'
 
 
-print(prohibited_args('Indira', 'Sergey'))
+print(wait_function('ISland'))
