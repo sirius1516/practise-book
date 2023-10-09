@@ -1,16 +1,18 @@
 from functools import wraps
 
-def hello_from_decorator(function):
+def prohibit_more_than_2_args(function):
     @wraps(function)
     def wrap_function(*args, **kwargs):
-        firstname = function(*args, **kwargs)
-        return str(firstname) + ' Hello from decorator!'
+        if len(args) < 3:
+            return function(*args, **kwargs)
+        else:
+            raise ValueError('Function must have less than 3 arguments')
     return wrap_function
 
 
-@hello_from_decorator
-def first_name_function():
-    return 'sirius1516'
+@prohibit_more_than_2_args
+def prohibited_args(*args, **kwargs):
+    return "Good job! There are 2 args"
 
 
-print(first_name_function())
+print(prohibited_args('Indira', 'Sergey'))
